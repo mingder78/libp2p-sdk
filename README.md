@@ -4,51 +4,34 @@
 
 👉cat app.ts
 ```
-import { ScientificCalculator, Calculator } from '@yourorg/my-libp2p-sdk';
-import Todo from '@yourorg/my-libp2p-sdk/Todo';
-import User from '@yourorg/my-libp2p-sdk/User';
+import { P2PNode } from '@yourorg/libp2p-sdk/P2PNode';
 
-const sci = new ScientificCalculator();
-console.log(sci instanceof ScientificCalculator); // true
-console.log(sci instanceof Calculator);           // true
-// Example usage
-const user = new Todo(1, 'Sample Todo', 'This is a sample todo item.', false);
-console.log(user);
+const main = async () => {
+  const p2p = await P2PNode.create()
+  console.log('Node is ready:', p2p.libp2p.peerId.toString())
 
-// Example usage
-const newUser = new User(1, 'john_doe');
-newUser.addTodo(user);
-console.log(newUser.getTodos());
-console.log(newUser)
+  // Example: listen for peer discovery
+  p2p.libp2p.addEventListener('peer:discovery', (evt) => {
+    console.log('Discovered:', evt.detail.id.toString())
+  })
+
+  // Later, stop it
+  // await p2p.stop()
+}
+
+main()
 ```
 
 ## run
 
 👉bun start
 ```
-$ bun ./app.ts
-true
-true
-t {
-  id: 1,
-  title: "Sample Todo",
-  description: "This is a sample todo item.",
-  isCompleted: false,
-}
-[
-  t {
-    id: 1,
-    title: "Sample Todo",
-    description: "This is a sample todo item.",
-    isCompleted: false,
-  }
-]
-c {
-  id: 1,
-  username: "john_doe",
-  addTodo: [Function: addTodo],
-  getTodos: [Function: getTodos],
-}
+$ bun --watch ./app.ts
+✅ libp2p started with id: 12D3KooWPVCCFnDnUScFRjLCZwmkcxk4nwT5AziMgrHP4MiyGHCT
+Node is ready: 12D3KooWPVCCFnDnUScFRjLCZwmkcxk4nwT5AziMgrHP4MiyGHCT
+Discovered: QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
+Discovered: QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN
+Discovered: QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa
 ```
 ## vitest
 

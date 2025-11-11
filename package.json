@@ -1,6 +1,6 @@
 {
-  "name": "@yourorg/my-libp2p-sdk",
-  "version": "0.0.2",
+  "name": "@yourorg/libp2p-sdk",
+  "version": "0.0.1",
   "description": "A high-end libp2p sdk for p2p project",
   "type": "module",
   "private": true,
@@ -18,7 +18,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./Todo": "./dist/modules/Todo.js",
-    "./User": "./dist/modules/User.js"
+    "./User": "./dist/modules/User.js",
+    "./P2PNode": "./dist/p2pnode.js"
   },
   "files": [
     "dist",
@@ -46,13 +47,17 @@
   },
   "typedocOptions": {
     "entryPointStrategy": "expand",
-    "entryPoints": ["src"],
+    "entryPoints": [
+      "src"
+    ],
     "out": "docs/api",
     "theme": "default",
     "includeVersion": true,
     "hideGenerator": true
   },
   "dependencies": {
-    "@yourorg/my-libp2p-sdk": "link:@yourorg/my-libp2p-sdk"
+    "@yourorg/libp2p-sdk": "link:@yourorg/libp2p-sdk",
+    "@libp2p/bootstrap": "^12.0.8",
+    "libp2p": "^3.1.0"
   }
 }
