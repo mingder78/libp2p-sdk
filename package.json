@@ -1,0 +1,58 @@
+{
+  "name": "@yourorg/my-libp2p-sdk",
+  "version": "0.0.2",
+  "description": "A high-end libp2p sdk for p2p project",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch ./app.ts",
+    "start": "bun ./app.ts",
+    "build": "bun run build.mjs",
+    "type-docs": "typedoc",
+    "show-docs": "npx serve docs/api",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "bun run build && bun type-docs"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./Todo": "./dist/modules/Todo.js",
+    "./User": "./dist/modules/User.js"
+  },
+  "files": [
+    "dist",
+    "docs/api",
+    "package.json",
+    "README.md"
+  ],
+  "keywords": [
+    "vitest",
+    "typedoc",
+    "react",
+    "bun"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@vitest/coverage-v8": "4.0.8",
+    "@vitest/ui": "4.0.8",
+    "bun-plugin-dts": "^0.3.0",
+    "typedoc": "^0.28.14",
+    "vitest": "^4.0.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "typedocOptions": {
+    "entryPointStrategy": "expand",
+    "entryPoints": ["src"],
+    "out": "docs/api",
+    "theme": "default",
+    "includeVersion": true,
+    "hideGenerator": true
+  },
+  "dependencies": {
+    "@yourorg/my-libp2p-sdk": "link:@yourorg/my-libp2p-sdk"
+  }
+}
