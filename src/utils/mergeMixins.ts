@@ -1,23 +1,16 @@
-type ConflictStrategy = "first" | "last";
+type Constructor<T = {}> = new (...args: any[]) => T;
 
-type Constructor<T = any> = new (...args: any[]) => T;
-
-// Helper to detect plain objects
-function isPlainObject(obj: any): obj is Record<string, any> {
-  return typeof obj === "object" && obj !== null && obj.constructor === Object;
-}
-
-// Deep merge function
+// Deep merge helper
 function deepMerge(target: any, source: any): any {
   if (Array.isArray(target) && Array.isArray(source)) {
-    return [...target, ...source]; // concat arrays
+    return [...target, ...source];
   }
 
   if (isPlainObject(target) && isPlainObject(source)) {
     const result: Record<string, any> = { ...target };
     for (const key of Object.keys(source)) {
       if (key in target) {
-        result[key] = deepMerge(target[key], source[key]); // recursive merge
+        result[key] = deepMerge(target[key], source[key]);
       } else {
         result[key] = source[key];
       }
@@ -29,18 +22,22 @@ function deepMerge(target: any, source: any): any {
   return source;
 }
 
-export function mergeMixins<T extends Constructor[]>(
-  strategy: ConflictStrategy,
-  ...bases: T
-) {
+function isPlainObject(obj: any): obj is Record<string, any> {
+  return typeof obj === "object" && obj !== null && obj.constructor === Object;
+}
+
+// Merge multiple classes (A, B, C, ...)
+export function mergeMixins<T extends Constructor[]>(...bases: T) {
   class Base {}
+
   return bases.reduce((acc, NextBase) => {
     return class Mixed extends (acc as any) {
       constructor(...args: any[]) {
         super(...args);
+
         const instance = new (NextBase as any)(...args);
 
-        // Deep merge data
+        // Merge instance fields deeply
         for (const key of Object.keys(instance)) {
           const existing = (this as any)[key];
           const incoming = instance[key];
@@ -51,15 +48,16 @@ export function mergeMixins<T extends Constructor[]>(
           }
         }
 
-        // Merge methods based on strategy
+        // Merge prototype methods (but don't overwrite existing)
         const proto = Object.getPrototypeOf(instance);
         for (const key of Object.getOwnPropertyNames(proto)) {
           if (key === "constructor") continue;
-          const hasKey = key in this;
-          const descriptor = Object.getOwnPropertyDescriptor(proto, key)!;
-
-          if (strategy === "last" || !hasKey) {
-            Object.defineProperty(this, key, descriptor);
+          if (!(key in this)) {
+            Object.defineProperty(
+              this,
+              key,
+              Object.getOwnPropertyDescriptor(proto, key)!
+            );
           }
         }
       }
