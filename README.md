@@ -22,9 +22,28 @@ const main = async () => {
 main()
 ```
 
+## install
+To install dependencies:
+
+```bash
+bun install
+```
+
+To run dev:
+
+```bash
+bun dev
+```
+
+This project was created using `bun init` in bun v1.2.20. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+
 ## run
 
-👉bun start
+```sh
+👉$ link
+👉$ link @yourorg/libp2p-sdk
+```
+👉$ dev
 ```
 $ bun --watch ./app.ts
 ✅ libp2p started with id: 12D3KooWPVCCFnDnUScFRjLCZwmkcxk4nwT5AziMgrHP4MiyGHCT
@@ -35,7 +54,7 @@ Discovered: QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa
 ```
 ## vitest
 
-👉bun run test
+👉$ run test
 ```sh
 $ vitest
 
@@ -57,7 +76,7 @@ $ vitest
 ## bun test
 
 ```
-👉bun
+👉$
  test
 bun test v1.2.20 (6ad208bc)
 
@@ -86,31 +105,16 @@ test/calculator.test.ts:
 Ran 13 tests across 3 files. [50.00ms]
 ```
 
-## install
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run dev:
-
-```bash
-bun dev
-```
-
-This project was created using `bun init` in bun v1.2.20. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
-
-## build and show docs
+## build typedoc and show docs
 
 ```sh
-👉bun type-docs
+👉$ type-docs
 // and
-👉bun show-docs
+👉$ show-docs
 ```
 ## npm publish
 
-👉npm publish --access public
+👉$ npm publish --access public
 ```
 > @yourorg/my-libp2p-sdk@0.0.2 prepublishOnly
 > bun run build && bun type-docs

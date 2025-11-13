@@ -56,8 +56,11 @@
     "hideGenerator": true
   },
   "dependencies": {
-    "@yourorg/libp2p-sdk": "link:@yourorg/libp2p-sdk",
     "@libp2p/bootstrap": "^12.0.8",
+    "@libp2p/identify": "^4.0.7",
+    "@libp2p/kad-dht": "^16.1.0",
+    "@libp2p/ping": "^3.0.7",
+    "@yourorg/libp2p-sdk": "^0.0.1",
     "libp2p": "^3.1.0"
   }
 }
