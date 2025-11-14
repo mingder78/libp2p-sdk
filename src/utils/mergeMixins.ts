@@ -61,7 +61,7 @@ export function mergeMixins<T extends Constructor[]>(...bases: T) {
 
 export type FunctionMergeStrategy = "chain" | "first" | "last";
 
-export function mergeWithStrategy<T extends Constructor[]>(
+export function createP2PNode<T extends Constructor[]>(
   strategy: FunctionMergeStrategy,
   ...bases: T
 ) {

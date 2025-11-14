@@ -14,7 +14,7 @@ export class BootstrapNode {
     // a bootstrap node
 
     static RELAY_NODES = [
-        '/dns6/14490944-bced-4f7a-90d0-5469826d6d01.pub.instances.scw.cloud/tcp/443/wss/p2p/12D3KooW9scFmH8UkU39qG5WKWY5WW3MRTERUqLPCoqLQ1oAPpS4'
+      '/ip4/127.0.0.1/tcp/54432/ws/p2p/12D3KooWE2D5ZyG9oLFLeGqVp8SHtymurWebHtsrSTD7fW3H8iXT',
     ]
 
     static BOOTSTRAP_NODES = [
@@ -53,7 +53,7 @@ export class BootstrapNode {
         peerDiscovery: [
             bootstrap({
                 list:
-                    bootstrapPeers, // use the bootstrapPeers array defined in peerUtils.ts
+                    BootstrapNode.RELAY_NODES, // use the bootstrapPeers array defined in peerUtils.ts
             }),
             pubsubPeerDiscovery({
                 interval: 10_000,
@@ -85,7 +85,7 @@ export class BootstrapNode {
             );
             try {
                 await libp2p.dial(maddrs); // dial the new peer
-                console.log(`Successfully connected to peer: ${evt.detail.id.toString()}`);
+                console.log(`🦊 Successfully connected to peer: ${evt.detail.id.toString()}`);
             } catch (err) {
                 // Silently handle connection failures - this is normal in P2P networks
                 // Only log if it's an unexpected error type

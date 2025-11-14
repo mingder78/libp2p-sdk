@@ -1,16 +1,45 @@
 import { createLibp2p, type Libp2p, type Libp2pOptions } from 'libp2p'
 import { identify } from '@libp2p/identify'
-import { ping } from '@libp2p/ping'
+import { circuitRelayServer } from '@libp2p/circuit-relay-v2'
+import { webSockets } from '@libp2p/websockets'
+import { noise } from '@chainsafe/libp2p-noise'
+import { yamux } from '@chainsafe/libp2p-yamux' 
 
 export class RelayNode {
     libp2p: Libp2p;
     options: Libp2pOptions = {
-            services: {
-                identify: identify(),
-                ping: ping(),
-            }
+        addresses: {
+            listen: ['/ip4/127.0.0.1/tcp/0/ws']
+            // TODO check "What is next?" section
+        },
+        connectionEncrypters: [
+            noise()
+        ],
+        streamMuxers: [
+            yamux()
+        ],
+        services: {
+            identify: identify(),
+            relay: circuitRelayServer({
+                reservations: {  // Configures reservation limits (default: unlimited for testing)
+                    maxReservations: 50,
+                    maxReservationsPerPeer: 10,  // Limits reservations per peer
+                    reservationDuration: 300000,
+                    reservationTTL: 600000
+                },
+                connections: {  // Limits relayed connections
+                    maxIncoming: 100,
+                    maxOutgoing: 100,
+                    maxPerPeer: 5
+                },
+                // ACL: undefined  // No ACL = accepts reservations from any peer (key for "true" reservations)
+                // For production: ACL: { allow: ['QmSpecificPeerID'] } to restrict
+                metrics: { enabled: true }  // Optional: Enable Prometheus metrics
+            })
         }
-    constructor(public libp2p: Libp2p) { 
+    };
+
+    constructor(public libp2p: Libp2p) {
         this.libp2p = libp2p;
     }
 
