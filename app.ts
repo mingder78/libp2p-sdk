@@ -15,5 +15,3 @@ nodeInstance.create().then(async (node: any) => {
     getPeerDetails(node.libp2p)
   }, 3000)
 });
-
-

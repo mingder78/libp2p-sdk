@@ -53,7 +53,7 @@ export class BootstrapNode {
         peerDiscovery: [
             bootstrap({
                 list:
-                    BootstrapNode.RELAY_NODES, // use the bootstrapPeers array defined in peerUtils.ts
+                    BootstrapNode.BOOTSTRAP_NODES,
             }),
             pubsubPeerDiscovery({
                 interval: 10_000,
