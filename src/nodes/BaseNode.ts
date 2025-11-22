@@ -1,6 +1,7 @@
 import { createLibp2p, type Libp2p, type Libp2pOptions } from 'libp2p'
 import { identify } from '@libp2p/identify'
 import { ping } from '@libp2p/ping'
+import { logger } from '@libp2p/logger'
 import {
   WebRTC,
   WebSockets,
@@ -9,7 +10,7 @@ import {
   Circuit,
   WebRTCDirect,
 } from "@multiformats/multiaddr-matcher";
-
+const log = logger('test')
 export class BaseNode {
     libp2p: Libp2p;
     options: Libp2pOptions = {
@@ -18,7 +19,7 @@ export class BaseNode {
             ping: ping(),
         }
     }
-    constructor(public libp2p: Libp2p) {
+    constructor(libp2p: Libp2p) {
         this.libp2p = libp2p;
     }
 
@@ -48,25 +49,18 @@ export class BaseNode {
     async create(): Promise<BaseNode> {
         const libp2p: Libp2p = await createLibp2p(this.options)
         await libp2p.start()
-        console.log('✅ Base Node libp2p started with id:', libp2p.peerId.toString())
+        log('✅ Base Node libp2p started with id:', libp2p.peerId.toString())
 
-        libp2p.addEventListener('self:peer:update', (event) => {
+        libp2p.addEventListener('self:peer:update', (event: any) => {
             // Update multiaddrs list, only show WebRTC addresses
-            const multiaddrs = libp2p.getMultiaddrs()
-                .filter(ma => WebRTC.matches(ma))
-                .map((ma) => {
-                    const el = document.createElement('li')
-                    el.textContent = ma.toString()
-                    return el
-                })
-            // document.getElementById('multiaddrs').replaceChildren(...multiaddrs)
-            console.log(...multiaddrs)
+            const multiaddrs = event.getMultiaddrs()
+            log(multiaddrs)
         })
-        libp2p.addEventListener('connection:open', (event) => {
-            console.log('Peer multiple addrs:', libp2p.getMultiaddrs().map(a => a.toString()))
+        libp2p.addEventListener('connection:open', (event: any) => {
+            log('Peer multiple addrs:', libp2p.getMultiaddrs().map(a => a.toString()))
         })
-        libp2p.addEventListener('connection:close', (event) => {
-            console.log('connection closed:', event)
+        libp2p.addEventListener('connection:close', (event: any) => {
+            log('connection closed:', event)
         })
 
         return new BaseNode(libp2p);
@@ -74,6 +68,6 @@ export class BaseNode {
 
     async stop() {
         await this.libp2p.stop()
-        console.log('🛑 libp2p stopped')
+        log('🛑 libp2p stopped')
     }
 }
