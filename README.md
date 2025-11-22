@@ -1,5 +1,9 @@
 # my-project (template) with lib typedoc
 
+Requirement: 
+* bun v1.2.20
+* node v22.x
+
 ## example code
 
 👉cat app.ts
